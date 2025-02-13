@@ -1,4 +1,4 @@
-export default interface PhotoType {
+export default interface Photo {
     photoId: number;
     url: string;
     albumId: number;

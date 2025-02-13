@@ -1,34 +1,68 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Album from '../types/Album';
+import AlbumComponent from './AlbumComponent';
+import TextField from '@mui/material/TextField';
 
-const Photos: React.FC = () => {
-    const [data, setData] = useState<any>(null);
-    const [error, setError] = useState<string | null>(null);
+type AlbumProps = {
+    albums: Album[];
+};
+
+const Photos: React.FC<AlbumProps> = ({ albums }) => {
+    const [searchAlbumId, setSearchAlbumId] = useState('');
+    const [searchPhotoId, setSearchPhotoId] = useState('');
+    const [filteredAlbums, setFilteredAlbums] = useState(albums);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch("http://env-6.eba-3pnfx2mm.us-east-2.elasticbeanstalk.com/albums");
-                const json = await response.json();
-                setData(json);
-            } catch (error) {
-                setError((error as Error).message);
-                console.error('Error fetching data:', error);
-            }
-        };
+        if (searchAlbumId) {
+            setSearchPhotoId('');
+            setFilteredAlbums(
+                albums.filter(album => 
+                    album.albumId.toString().includes(searchAlbumId)
+                )
+            );
+        } else if (searchPhotoId) {
+            setFilteredAlbums(albums);
+        } else {
+            setFilteredAlbums(albums);
+        }
+    }, [searchAlbumId, searchPhotoId, albums]);
 
-        fetchData();
-    }, []);
+    const handleAlbumSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchAlbumId(event.target.value);
+        setSearchPhotoId('');
+    };
+
+    const handlePhotoSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchPhotoId(event.target.value);
+        setSearchAlbumId('');
+    }
 
     return (
-        <div>
-            <h2>Fetched Data:</h2>
-            {error ? (
-                <p style={{ color: 'red' }}>Error: {error}</p>
-            ) : (
-                <pre>{JSON.stringify(data, null, 2)}</pre>
-            )}
+        <div >
+            <div className="flex justify-center">
+                <div className="flex items-center gap-4">
+                    <TextField 
+                        id="outlined-search-album" 
+                        label="Search by Album ID" 
+                        type="search" 
+                        value={searchAlbumId}
+                        onChange={handleAlbumSearchChange}
+                    />
+                    <span>- or -</span>
+                    <TextField 
+                        id="outlined-search-photo" 
+                        label="Search by Photo ID" 
+                        type="search" 
+                        value={searchPhotoId}
+                        onChange={handlePhotoSearchChange}
+                    />
+                </div>
+            </div>
+            {filteredAlbums.map(album => (
+                <AlbumComponent key={album.albumId} album={album} photoIdFilter={searchPhotoId} />
+            ))}
         </div>
     );
 };

@@ -1,0 +1,26 @@
+/* AlbumComponent.css */
+.album-container {
+    max-width: 1000px;
+    margin: 20px auto; 
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    justify-content: center; /* Center the photo containers */
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.album-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.album-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
