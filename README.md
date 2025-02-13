@@ -4,6 +4,7 @@ Made as an exercise in an afternoon, to be seen with the Photo Share Backend rep
 
 ## Requirements
 node 22+
+
 npm 11+
 
 ## Running
